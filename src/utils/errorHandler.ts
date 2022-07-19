@@ -18,8 +18,9 @@ const errorDict = {
     req: Request,
     res: Response,
     next: NextFunction) {
-    const {status, message} = err;
-    if(err) res.status(status || 500).send(message || "Internal server error");
+    const {status} = err;
+    console.log(err)
+    if(err) res.status(status || 500).send(errorDict[status] || "Internal server error");
     next()
 }
 

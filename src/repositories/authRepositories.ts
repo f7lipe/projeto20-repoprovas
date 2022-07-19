@@ -6,3 +6,11 @@ export async function createUser(user: user) {
         data: user
     });
 }
+
+export async function findUser(email: string) {
+    return await prisma.user.findFirst({
+        where: {
+            email
+        }
+    });
+}

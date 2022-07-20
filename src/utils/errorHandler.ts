@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-
+import { Prisma } from "@prisma/client";
+import Joi from "joi";
 
 const errorDict = {
     "400": "Bad Request",
@@ -9,8 +10,7 @@ const errorDict = {
     "405": "Method Not Allowed",
     "406": "Not Acceptable",
     "409": "Conflict",
-    "500": "Internal Server Error",
-    "Unique constraint failed on the fields: (`email`)": "User already exists",
+    "500": "Internal Server Error"
 }
 
  export default function handleErrors(
@@ -19,7 +19,14 @@ const errorDict = {
     res: Response,
     next: NextFunction) {
     const {status} = err;
-    console.log(err)
+    const joiError = err as Joi.ValidationError;
+    if (joiError.isJoi) {
+        const errors = joiError.details.map(detail => detail.message);
+        return res.status(400).send(errors)
+    }
+    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+        return res.status(401).send(err.message)
+    }
     if(err) res.status(status || 500).send(errorDict[status] || "Internal server error");
     next()
 }

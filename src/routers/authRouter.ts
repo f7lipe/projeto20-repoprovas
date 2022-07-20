@@ -2,6 +2,7 @@ import { Router } from "express";
 import * as authSchemas from "../schemas/authSchemas.js";
 import * as schemaValidator from "../middlewares/schemaValidatorMiddleware.js";
 import * as authController from "../controllers/authController.js";
+import { validToken } from "../middlewares/tokenValidatorMiddleware.js";
 
 const authRouter = Router();
 

@@ -20,14 +20,15 @@ const errorDict = {
     next: NextFunction) {
     const {status} = err;
     const joiError = err as Joi.ValidationError;
+    const prismaError = err instanceof Prisma.PrismaClientKnownRequestError
     if (joiError.isJoi) {
         const errors = joiError.details.map(detail => detail.message);
         return res.status(400).send(errors)
     }
-    if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    if (prismaError) {
         return res.status(401).send(err.message)
     }
-    if(err) res.status(status || 500).send(errorDict[status] || "Internal server error");
+    if(err) res.status(status || 500).send(errorDict[status] || errorDict[500]);
     next()
 }
 

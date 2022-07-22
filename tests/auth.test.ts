@@ -11,7 +11,6 @@ beforeEach(async () => {
     await prisma.$executeRaw`TRUNCATE TABLE users;`;
   });
   
-
 describe("Authentication tests", () => {
 
     it("Should not create user with invalid email", async () => {

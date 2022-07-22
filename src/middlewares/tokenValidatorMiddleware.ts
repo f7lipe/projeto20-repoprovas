@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import "../config/envConfig.js"
 import jwt from "jsonwebtoken";
 
+
 export async function validToken (req: Request, res: Response, next: NextFunction) {
     const {authorization} = req.headers;
 

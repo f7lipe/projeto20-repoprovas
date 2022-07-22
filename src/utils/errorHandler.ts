@@ -18,6 +18,7 @@ const errorDict = {
     req: Request,
     res: Response,
     next: NextFunction) {
+        console.log(err);
     const {status} = err;
     const joiError = err as Joi.ValidationError;
     const prismaError = err instanceof Prisma.PrismaClientKnownRequestError

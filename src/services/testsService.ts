@@ -34,6 +34,6 @@ export async function get(groupBy: groupBy, name: string) {
         return await disciplineRepository.getTestsByDisciplines();
     }
     if (groupBy === 'teacher') {
-
+        return await disciplineRepository.getTestByTeacher();
     }
 }

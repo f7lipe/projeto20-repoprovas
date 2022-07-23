@@ -38,3 +38,20 @@ export async function getTestsByDisciplines() {
     },
   });
 }
+
+export async function getTestByTeacher() {
+  return prisma.teacherDiscipline.findMany({
+    where: {
+      AND: { teacher: {  }, tests: { some: {} } },
+    },
+    include: {
+      teacher: true,
+      discipline: true,
+      tests: {
+        include: {
+          category: true,
+        },
+      },
+    },
+  });
+}

@@ -26,3 +26,14 @@ export async function create(test: test) {
         teacherDisciplineId: existingTeacherDiscipline.id,
     });
 }
+
+export type groupBy =  'discipline' | 'teacher';
+
+export async function get(groupBy: groupBy, name: string) {
+    if (groupBy === 'discipline') {
+        return await disciplineRepository.getTestsByDisciplines();
+    }
+    if (groupBy === 'teacher') {
+
+    }
+}

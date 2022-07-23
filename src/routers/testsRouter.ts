@@ -12,4 +12,10 @@ testsRouter.post(
     testController.create
 )
 
+testsRouter.get(
+    "/tests",
+    validToken,
+    testController.get
+)
+
 export default testsRouter;

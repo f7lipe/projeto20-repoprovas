@@ -109,6 +109,7 @@ async function main(){
 			disciplineId: 6,
 		},
 	];
+
 	const tests = [
 		{
 			name: 'Prova HTML e CSS',

@@ -21,6 +21,7 @@ const invalidTest = {...validTest, name: ""};
 describe("Integration Tests", () => {
 
     beforeAll(async () => {
+    await prisma.$executeRaw`TRUNCATE TABLE tests`;
     await prisma.$executeRaw`TRUNCATE TABLE users;`;
   });
 
@@ -68,11 +69,11 @@ describe("Integration Tests", () => {
         it("Should create a test given valid info", async () =>  {
             const user = await supertest(app).post("/signin").send(validCredentials);
             const { token }  = user.body
-            const responseTest = await supertest(app)
+            const response = await supertest(app)
                                       .post("/test")      
                                       .set("Authorization", `Bearer ${token}`)
                                       .send(validTest);
-            expect(responseTest.status).toBe(201);
+            expect(response.status).toBe(201);
         })
 
         it("Shouldn't create a test given invalid info", async () =>  {
@@ -120,7 +121,7 @@ describe("Integration Tests", () => {
             expect(response.body.tests.length).toBeGreaterThan(0);
         })
 
-        it("Shouldn't return no test when no filter is passed", async () =>  {
+        it("Shouldn't return tests when no filter is passed", async () =>  {
             const user = await supertest(app).post("/signin").send(validCredentials);
             const { token }  = user.body
             const response = await supertest(app)

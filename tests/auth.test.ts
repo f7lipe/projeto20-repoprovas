@@ -65,7 +65,7 @@ describe("Integration Tests", () => {
     describe("Tests suit", () => {
         
         
-        it("Should creat a test given valid info", async () =>  {
+        it("Should create a test given valid info", async () =>  {
             const user = await supertest(app).post("/signin").send(validCredentials);
             const { token }  = user.body
             const responseTest = await supertest(app)
@@ -73,6 +73,60 @@ describe("Integration Tests", () => {
                                       .set("Authorization", `Bearer ${token}`)
                                       .send(validTest);
             expect(responseTest.status).toBe(201);
+        })
+
+        it("Shouldn't create a test given invalid info", async () =>  {
+            const user = await supertest(app).post("/signin").send(validCredentials);
+            const { token }  = user.body
+            const responseTest = await supertest(app)
+                                      .post("/test")      
+                                      .set("Authorization", `Bearer ${token}`)
+                                      .send(invalidTest);
+            expect(responseTest.status).toBe(400);
+        })
+
+        it("Shouldn't create a test when token is not sent", async () =>  {
+            const responseTest = await supertest(app)
+                                      .post("/test")   
+                                      .send(validTest);
+            expect(responseTest.status).toBe(403);
+        })
+
+        it("Shouldn't create a test with invalid token", async () =>  {
+            const token = 0;
+            const responseTest = await supertest(app)
+                                      .post("/test")  
+                                      .set("Authorization", `Bearer ${token}`) 
+                                      .send(validTest);
+            expect(responseTest.status).toBe(500);
+        })
+
+        it("Should return at least one test given a discipline filter", async () =>  {
+            const user = await supertest(app).post("/signin").send(validCredentials);
+            const { token }  = user.body
+            const response = await supertest(app)
+                            .get("/tests?groupby=discipline")
+                            .set("Authorization", `Bearer ${token}`);
+            expect(response.status).toBe(200);
+            expect(response.body.tests.length).toBeGreaterThan(0);
+        })
+        it("Should return at least one test given a teacher filter", async () =>  {
+            const user = await supertest(app).post("/signin").send(validCredentials);
+            const { token }  = user.body
+            const response = await supertest(app)
+                            .get("/tests?groupby=teacher")
+                            .set("Authorization", `Bearer ${token}`);
+            expect(response.status).toBe(200);
+            expect(response.body.tests.length).toBeGreaterThan(0);
+        })
+
+        it("Shouldn't return no test when no filter is passed", async () =>  {
+            const user = await supertest(app).post("/signin").send(validCredentials);
+            const { token }  = user.body
+            const response = await supertest(app)
+                            .get("/tests")
+                            .set("Authorization", `Bearer ${token}`);
+            expect(response.status).toBe(400);
         })
     })
 

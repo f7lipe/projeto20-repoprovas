@@ -5,6 +5,7 @@ import { test } from "../schemas/testSchemas.js";
 export async function create(req: Request, res: Response) {
   const test: test = req.body;
   await testsService.create(test);
+  console.log(test);
   res.sendStatus(201)
 }
 
